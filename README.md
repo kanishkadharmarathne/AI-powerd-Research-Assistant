@@ -38,8 +38,10 @@ Edit the `query` variable in `main.py` to search for different topics.
 3. Create a `.env` file with your API keys:
    ```
    GOOGLE_API_KEY=your_key_here
+   ANTHROPIC_API_KEY= ""
+   OPENAI_API_KEY=""
    ```
-4. Run: `python main.py`
+4. Run: `python main.py or streamlit run app.py`
 
 ## License
 
