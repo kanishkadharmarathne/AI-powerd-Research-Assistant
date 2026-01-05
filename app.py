@@ -6,6 +6,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import PydanticOutputParser
+from datetime import datetime, date
 
 load_dotenv()
 
@@ -127,6 +128,34 @@ st.markdown("""
         padding: 12px 15px;
         font-size: 14px;
         box-shadow: inset 0 2px 8px rgba(0,0,0,0.3);
+    }
+    
+    /* Date Input with Calendar Icon */
+    input[type="date"] {
+        background-color: rgba(45, 27, 78, 0.7) !important;
+        color: #E8D9C8 !important;
+        border: 2px solid #D4A574 !important;
+        border-radius: 12px !important;
+        padding: 12px 15px !important;
+        font-size: 14px !important;
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.3) !important;
+    }
+    
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        background-color: #D4A574;
+        border-radius: 4px;
+        margin-right: 5px;
+        opacity: 1;
+    }
+    
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        background-color: #FFD700;
+    }
+    
+    input[type="date"]:focus {
+        border-color: #FFD700 !important;
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.3), 0 0 10px rgba(212, 165, 116, 0.3) !important;
     }
     
     .stTextInput > div > div > input::placeholder {
@@ -455,19 +484,24 @@ if "is_pm" not in st.session_state:
 col1, col_time, col4, col5 = st.columns([2, 2.5, 2, 1])
 
 with col1:
-    date_of_birth = st.text_input(
-        "Date of Birth (DD/MM/YYYY)",
-        placeholder="e.g., 15/06/1990"
+    birth_date = st.date_input(
+        "Date of Birth",
+        value=None,
+        format="DD/MM/YYYY",
+        min_value=date(1901, 1, 1),
+        max_value=date.today()
     )
+    date_of_birth = birth_date.strftime("%d/%m/%Y") if birth_date else ""
 
 with col_time:
     time_col1, time_col2, time_col3 = st.columns([2, 0.6, 0.9])
     with time_col1:
-        time_input_only = st.text_input(
-            "Time of Birth (HH:MM)",
-            placeholder="e.g., 02:30",
-            label_visibility="visible"
+        birth_time = st.time_input(
+            "Time of Birth",
+            value=None,
+            step=60
         )
+        time_input_only = birth_time.strftime("%H:%M") if birth_time else ""
     with time_col2:
         am_pm_status = "PM" if st.session_state.is_pm else "AM"
         st.markdown(f"<div style='display: flex; align-items: center; justify-content: center; height: 40px; margin-top: 30px; font-weight: bold; font-size: 16px;'>{am_pm_status}</div>", unsafe_allow_html=True)
